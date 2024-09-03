@@ -88,6 +88,6 @@ chunks = split_text(document)
 
 texte = document
 
-def ask_question_to_pdf(question):
+def ask_question_to_pdf(question,texte):
     return gpt3_completion(question,texte)
 
