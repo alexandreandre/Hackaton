@@ -3,6 +3,26 @@ const submitButton = document.getElementById("submit-button");
 const questionButton = document.getElementById("question-button");
 const messagesContainer = document.getElementById("messages-container");
 const loaderContainer = document.getElementById("loader-container");
+document.addEventListener('DOMContentLoaded', () => {
+    // Sélectionner le formulaire et le champ de fichier
+    const uploadForm = document.getElementById("upload-form");
+    const fileInput = document.getElementById("file");
+    const fileTitle = document.getElementById("file-title");
+
+    // Ajouter un écouteur d'événement pour le changement du fichier
+    fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+            // Obtenir le nom du fichier
+            const fileName = fileInput.files[0].name;
+
+            // Mettre à jour le contenu du div avec le titre du fichier
+            fileTitle.textContent = `Cours : ${fileName}`;
+
+            // Soumettre le formulaire automatiquement
+            uploadForm.submit();
+        }
+    });
+});
 
 const appendHumanMessage = (message) => {
     const humanMessageElement = document.createElement("div");
@@ -85,5 +105,18 @@ const handleQuestionClick = async () => {
 
     appendHumanMessage(question);
 };
+
+// Sélectionner le formulaire et le champ de fichier
+const uploadForm = document.getElementById("upload-form");
+const fileInput = document.getElementById("file");
+
+// Ajouter un écouteur d'événement pour le changement du fichier
+fileInput.addEventListener("change", () => {
+    if (fileInput.files.length > 0) {
+        // Soumettre le formulaire automatiquement
+        uploadForm.submit();
+    }
+});
+
 
 questionButton.addEventListener("click", handleQuestionClick);
