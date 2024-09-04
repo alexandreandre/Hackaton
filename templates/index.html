@@ -3,15 +3,15 @@
 
 <head>
     <title>Ma page</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 
 <body>
     <!-- Formulaire de téléchargement de fichier PDF -->
-    <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-container">
+    <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" class="upload-container">
         <label for="file" class="upload-label">Télécharge ton PDF</label>
         <input type="file" id="file" name="file" class="upload-input" accept="application/pdf" required />
+        <button type="submit" class="button">Envoyer</button>
     </form>
 
     <main class="main-container">
@@ -21,18 +21,21 @@
 
         <section id="messages-container" class="messages-container">
             <div class="message message-ai">
-                Je suis ton AIssistant de cours personnel ! Pose-moi une question sur
-                le cours et je te répondrai.
+                Je suis ton AIssistant de cours personnel ! Pose-moi une question sur le cours et je te répondrai.
+            </div>
+            <!-- Loader pour l'animation du cahier -->
+            <div id="loader-container" class="hidden">
+                <div class="notebook">
+                    <div class="notebook-cover"></div>
+                    <div class="notebook-pages"></div>
+                </div>
             </div>
         </section>
 
         <form id="prompt-form" class="prompt-container">
             <label for="prompt" class="prompt-label">Message</label>
-
             <input type="text" id="prompt" name="prompt" class="prompt-input" autocomplete="off" />
-
             <button type="submit" class="button" id="submit-button">Envoyer</button>
-
             <button type="button" class="button" id="question-button">
                 Pose-moi une question !
             </button>

@@ -20,6 +20,7 @@ def gpt3_completion(question,texte):
         {"role": "user", "content": question}
     ]
     )
+    print(texte)
     return(response.choices[0].message.content)
 load_dotenv()
 

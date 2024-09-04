@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from src.utils.ask_question_to_pdf import ask_question_to_pdf, read_pdf, split_text
 
 app = Flask(__name__)
-app.secret_key = 'jdjpew7fw'
+app.secret_key = 'jdjpew7fw'  # Nécessaire pour utiliser des sessions
 
 UPLOAD_FOLDER = 'uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -34,12 +34,11 @@ def upload_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename))
         print(f"Téléchargement du fichier : {filepath}")
         file.save(filepath)  # Sauvegarde le fichier sur le disque
-        print(read_pdf(filepath))
+        
         # Lecture du fichier PDF et traitement
         try:
             document = read_pdf(filepath)
             pdf_text = ' '.join(split_text(document))
-            
             # Stocker le texte dans la session pour l'utiliser dans 'prompt'
             session['pdf_text'] = pdf_text
             print(f"Le texte extrait du PDF a été stocké en session. Longueur du texte : {len(pdf_text)} caractères.")
@@ -57,17 +56,17 @@ def prompt():
     message = request.form['prompt']
     
     # Récupérer le texte extrait du PDF depuis la session
-    pdf_text = session.get('pdf_text', '')
-
+    pdf_text = session.get('pdf_text')
     if pdf_text:
         print(f"Question reçue : {message}")
+        print(f"Texte du PDF récupéré de la session (longueur : {len(pdf_text)} caractères).")
         answer = ask_question_to_pdf(message, pdf_text)
         print(f"Réponse générée : {answer}")
     else:
         print("Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait.")
         answer = "Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait."
     
-    return {"answer": answer}
+    return answer
 
 
 if __name__ == "__main__":
