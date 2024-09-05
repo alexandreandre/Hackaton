@@ -52,21 +52,11 @@ def upload_file():
 @app.route('/prompt', methods=['POST'])
 def prompt():
     message = request.form['prompt']
-    
     # Récupérer le texte extrait du PDF et l'historique de la session
     pdf_text = session.get('pdf_text', '')
-    history = []
     if pdf_text:
-        
-        # Ajouter le message actuel à l'historique
-        history = history + [{"role": "user", "content":message}]
-        
-        # Appel à l'IA avec le texte du PDF et l'historique
-        answer = ask_question_to_pdf(message, pdf_text, history)
-        
-        # Ajouter la réponse de l'IA à l'historique
-        history = history + [{"role": "assistant", "content":answer}]
-        print(history)
+       # Appel à l'IA avec le texte du PDF 
+        answer = ask_question_to_pdf(message, pdf_text)
     else:
         print("Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait.")
         answer = "Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait."

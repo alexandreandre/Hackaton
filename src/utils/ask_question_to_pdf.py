@@ -9,11 +9,11 @@ from flask import session
 
 client = OpenAI()
 
-def gpt3_completion(question, texte, history):
+def gpt3_completion(question, texte):
     # Envoyer la conversation à l'API GPT-3
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": "Texte du cours : " + texte}] + history + [{"role": "user", "content": "Nouveau message que j'envoie : " + question}]
+        messages=[{"role": "system", "content": "Texte du cours : " + texte}] + [{"role": "user", "content": "nique ta mere : " + question}]
         )
 
     # Renvoyer la réponse de l'IA
@@ -75,5 +75,5 @@ def split_text(text, chunk_size=5000):
         chunks.append(current_chunk.getvalue())
     return chunks
 
-def ask_question_to_pdf(question, texte, history):
-    return gpt3_completion(question, texte, history)
+def ask_question_to_pdf(question, texte):
+    return gpt3_completion(question, texte)
