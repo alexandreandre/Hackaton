@@ -1,16 +1,59 @@
 :root {
-    --primary-color: #4CAF50; /* Vert éclatant pour la modernité */
-    --secondary-color: #FFD700; /* Doré pour des éléments de contraste */
-    --background-color: #f0f0f0; /* Couleur de fond claire et agréable */
-    --text-color: #333333; /* Texte sombre pour une bonne lisibilité */
-    --message-human-bg: #e0ffe0; /* Couleur pastel pour les messages humains */
-    --message-ai-bg: #f0f0ff; /* Couleur douce pour les réponses AI */
-    --border-radius: 15px; /* Arrondir les bords pour un aspect moderne */
-    --button-bg-color: #4CAF50; /* Couleur des boutons principale */
-    --button-hover-bg: #45a049; /* Couleur lors du survol des boutons */
-    --loader-color: #FFD700; /* Couleur du loader */
+    --primary-color: #4CAF50; /* Vert */
+    --secondary-color: #FFD700;
+    --background-color: #ffffff; /* Fond blanc par défaut */
+    --text-color: #333333;
+    --message-human-bg: #e0ffe0;
+    --message-ai-bg: #f0f0ff;
+    --button-bg-color: #4CAF50;
+    --button-hover-bg: #45a049;
+    --loader-color: #FFD700;
     --max-body-width: 700px;
 }
+
+/* Mode sombre */
+.dark-mode {
+    --background-color: #000000; /* Fond noir pour le mode sombre */
+    --text-color: #f0f0f0; /* Texte blanc pour une meilleure lisibilité */
+    --message-human-bg: #333333; /* Fond des messages humains en gris foncé */
+    --message-ai-bg: #222222; /* Fond des messages AI en gris encore plus foncé */
+    --button-bg-color: #4CAF50; /* Garder les boutons verts */
+    --button-hover-bg: #3E8E41; /* Garder un survol vert plus sombre */
+}
+
+/* Appliquer les couleurs du mode en cours */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Styles pour le bouton de mode sombre */
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+#dark-mode-button {
+    background-color: var(--button-bg-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#dark-mode-button.dark-mode {
+    background-color: var(--button-bg-color);
+    color: black; /* Texte noir pour correspondre au mode clair dans le mode sombre */
+}
+
+#dark-mode-button:hover {
+    background-color: var(--button-hover-bg);
+}
+
 
 * {
     box-sizing: border-box;
@@ -24,6 +67,7 @@ body {
     color: var(--text-color);
 }
 
+/* Conteneur principal en mode clair */
 .main-container {
     max-width: var(--max-body-width);
     min-height: 100vh;
@@ -34,6 +78,16 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Mode sombre */
+.dark-mode body {
+    background-color: #1e1e1e; /* Fond global gris foncé */
+    color: #e0e0e0; /* Texte plus clair pour le mode sombre */
+}
+
+.dark-mode .main-container {
+    background-color: #2c2c2c; /* Conteneur gris foncé similaire au fond */
+    box-shadow: none; /* Supprimer ou réduire l'ombre en mode sombre */
+}
 .header {
     text-align: center;
 }
@@ -73,7 +127,12 @@ body {
     transform: translateY(-5px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+.prompt-label {
+    font-weight: bold;
+    color: var(--primary-color);
+}
 
+/* Mode clair (par défaut) */
 .prompt-container {
     position: fixed;
     bottom: 0;
@@ -90,17 +149,27 @@ body {
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.prompt-label {
-    font-weight: bold;
-    color: var(--primary-color);
-}
-
 .prompt-input {
     flex-grow: 1;
     padding: 10px;
     border: 2px solid var(--primary-color);
     border-radius: var(--border-radius);
     font-size: 1em;
+    background-color: white; /* Fond du champ de saisie */
+    color: var(--text-color); /* Couleur du texte */
+}
+
+/* Mode sombre */
+.dark-mode .prompt-container {
+    background-color: #2c2c2c; /* Fond gris foncé autour du champ de saisie */
+    border-top: 2px solid var(--primary-color);
+    box-shadow: none; /* Supprimer l'ombre en mode sombre */
+}
+
+.dark-mode .prompt-input {
+    background-color: #3c3c3c; /* Fond du champ de saisie en gris foncé */
+    color: #e0e0e0; /* Texte clair */
+    border: 2px solid var(--primary-color); /* Garder la bordure verte */
 }
 
 .button {
@@ -186,7 +255,7 @@ body {
 .upload-container {
     position: fixed;
     top: 41%;
-    left: 10%;
+    left: 5%;
     /* transform: translateY(-50%); */
     width: 150px;
     height: 150px;
@@ -247,8 +316,8 @@ body {
 
 .upload-text {
     position: fixed;
-    top: 37%;
-    left: 10%;
+    top: 35%;
+    left: 5%;
     transform: translateY(-50%);
     font-size: 1.2em;
     font-weight: 600;

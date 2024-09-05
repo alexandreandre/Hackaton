@@ -12,11 +12,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Assurez-vous que le dossier de téléchargement existe
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-
 @app.route("/")
 def hello_world():
     return render_template("index.html")
-
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -41,6 +39,7 @@ def upload_file():
             pdf_text = ' '.join(split_text(document))
             # Stocker le texte dans la session pour l'utiliser dans 'prompt'
             session['pdf_text'] = pdf_text
+            session['history'] = []  # Initialiser l'historique de la conversation
             print(f"Le texte extrait du PDF a été stocké en session. Longueur du texte : {len(pdf_text)} caractères.")
             return redirect(url_for('hello_world'))
         except Exception as e:
@@ -50,24 +49,26 @@ def upload_file():
         print("Aucun fichier valide reçu.")
         return "Erreur lors du téléchargement du fichier", 400
 
-
 @app.route('/prompt', methods=['POST'])
 def prompt():
     message = request.form['prompt']
     
-    # Récupérer le texte extrait du PDF depuis la session
-    pdf_text = session.get('pdf_text')
+    # Récupérer le texte extrait du PDF et l'historique de la session
+    pdf_text = session.get('pdf_text', '')
+    history = []
     if pdf_text:
-        print(f"Question reçue : {message}")
-        print(f"Texte du PDF récupéré de la session (longueur : {len(pdf_text)} caractères).")
-        answer = ask_question_to_pdf(message, pdf_text)
-        print(f"Réponse générée : {answer}")
+        
+        # Ajouter le message actuel à l'historique
+        history = history + [{"role": "user", "content":message}]
+        
+        # Appel à l'IA avec le texte du PDF et l'historique
+        answer = ask_question_to_pdf(message, pdf_text, history)
+        
+        # Ajouter la réponse de l'IA à l'historique
+        history = history + [{"role": "assistant", "content":answer}]
+        print(history)
     else:
         print("Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait.")
         answer = "Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait."
     
     return answer
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

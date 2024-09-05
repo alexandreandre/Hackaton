@@ -23,6 +23,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const darkModeButton = document.getElementById('dark-mode-button');
+    const body = document.body;
+
+    // Vérifier si l'utilisateur a déjà activé le dark mode
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        body.classList.add('dark-mode');
+        darkModeButton.textContent = "Mode clair"; // Mode sombre activé, afficher "Mode clair"
+        darkModeButton.classList.add('dark-mode');
+    } else {
+        darkModeButton.textContent = "Mode sombre"; // Mode clair activé
+    }
+
+    // Bascule entre le mode clair et sombre
+    darkModeButton.addEventListener('click', () => {
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            darkModeButton.textContent = "Mode sombre"; // Revenir au mode clair
+            darkModeButton.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'disabled');
+        } else {
+            body.classList.add('dark-mode');
+            darkModeButton.textContent = "Mode clair"; // Activer le mode sombre
+            darkModeButton.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'enabled');
+        }
+    });
+});
+
+
 
 const appendHumanMessage = (message) => {
     const humanMessageElement = document.createElement("div");
