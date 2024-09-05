@@ -10,14 +10,27 @@ from flask import session
 client = OpenAI()
 
 def gpt3_completion(question, texte):
-    # Envoyer la conversation à l'API GPT-3
+    # Check if the session context exists
+    if "context" not in session:
+        # If it doesn't exist, initialize it with an empty string
+        session["context"] = ""
+
+    # Append the current conversation to the session context
+    session["context"] += "User Question: " + question + "\n"
+    session["context"] += "Course Text: " + texte + "\n"
+
+    # Send the conversation to the GPT-3 API
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": "Texte du cours : " + texte}] + [{"role": "user", "content": "nique ta mere : " + question}]
-        )
+        messages=[{"role": "system", "content": session["context"]}] + [{"role": "user", "content": question}]
+    )
 
-    # Renvoyer la réponse de l'IA
+    # Update the session context with the AI's response
+    session["context"] += "AI Response: " + response.choices[0].message.content + "\n"
+
+    # Return the AI's response
     return response.choices[0].message.content
+
 
 load_dotenv()
 

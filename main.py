@@ -50,12 +50,14 @@ def upload_file():
         return "Erreur lors du téléchargement du fichier", 400
 
 @app.route('/prompt', methods=['POST'])
+
+
 def prompt():
     message = request.form['prompt']
     # Récupérer le texte extrait du PDF et l'historique de la session
     pdf_text = session.get('pdf_text', '')
     if pdf_text:
-       # Appel à l'IA avec le texte du PDF 
+        # Appel à l'IA avec le texte du PDF 
         answer = ask_question_to_pdf(message, pdf_text)
     else:
         print("Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait.")
