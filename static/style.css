@@ -104,7 +104,10 @@ body {
     flex-direction: column;
     gap: 15px;
     margin-bottom: 30px;
+    max-height: 70vh; /* Limite la hauteur du conteneur à 70% de la hauteur de la fenêtre */
+    overflow-y: auto; /* Active le défilement vertical si nécessaire */
 }
+
 
 .message {
     padding: 15px;
