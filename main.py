@@ -3,6 +3,7 @@ import os
 from werkzeug.utils import secure_filename
 from src.utils.ask_question_to_pdf import ask_question_to_pdf, read_pdf, split_text
 
+
 app = Flask(__name__)
 app.secret_key = 'jdjpew7fw'  # Nécessaire pour utiliser des sessions
 
