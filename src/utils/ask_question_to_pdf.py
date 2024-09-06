@@ -9,6 +9,7 @@ from flask import session
 
 client = OpenAI()
 
+
 def gpt3_completion(question, texte):
     # Check if the session context exists
     if "context" not in session:
@@ -22,7 +23,8 @@ def gpt3_completion(question, texte):
     # Send the conversation to the GPT-3 API
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "system", "content": session["context"]}] + [{"role": "user", "content": question}]
+        messages=[{"role": "system", "content": session["context"]}]
+        + [{"role": "user", "content": question}],
     )
 
     # Update the session context with the AI's response
@@ -34,12 +36,15 @@ def gpt3_completion(question, texte):
 
 load_dotenv()
 
+
 def open_file(filepath):
     with open(filepath, "r", encoding="utf-8") as infile:
         return infile.read()
 
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
 openai.organization = os.getenv("OPENAI_ORGANIZATION")
+
 
 def read_pdf(filename):
     context = ""
@@ -60,6 +65,7 @@ def read_pdf(filename):
             # Append the text to context
             context += page_text
     return context
+
 
 def split_text(text, chunk_size=5000):
     chunks = []
@@ -87,6 +93,7 @@ def split_text(text, chunk_size=5000):
     if current_chunk:
         chunks.append(current_chunk.getvalue())
     return chunks
+
 
 def ask_question_to_pdf(question, texte):
     return gpt3_completion(question, texte)
