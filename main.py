@@ -3,7 +3,6 @@ import os
 from werkzeug.utils import secure_filename
 from src.utils.ask_question_to_pdf import ask_question_to_pdf, read_pdf, split_text
 
-
 app = Flask(__name__)
 app.secret_key = 'jdjpew7fw'  # Nécessaire pour utiliser des sessions
 
@@ -40,7 +39,8 @@ def upload_file():
             pdf_text = ' '.join(split_text(document))
             # Stocker le texte dans la session pour l'utiliser dans 'prompt'
             session['pdf_text'] = pdf_text
-            session['history'] = []  # Initialiser l'historique de la conversation
+            # Réinitialiser l'historique de la conversation
+            session['history'] = []
             print(f"Le texte extrait du PDF a été stocké en session. Longueur du texte : {len(pdf_text)} caractères.")
             return redirect(url_for('hello_world'))
         except Exception as e:
@@ -51,8 +51,6 @@ def upload_file():
         return "Erreur lors du téléchargement du fichier", 400
 
 @app.route('/prompt', methods=['POST'])
-
-
 def prompt():
     message = request.form['prompt']
     # Récupérer le texte extrait du PDF et l'historique de la session
@@ -60,6 +58,10 @@ def prompt():
     if pdf_text:
         # Appel à l'IA avec le texte du PDF 
         answer = ask_question_to_pdf(message, pdf_text)
+        # Ajouter la question et la réponse à l'historique
+        history = session.get('history', [])
+        history.append({'user': message, 'assistant': answer})
+        session['history'] = history
     else:
         print("Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait.")
         answer = "Aucun PDF n'a été téléchargé ou le texte n'a pas pu être extrait."
